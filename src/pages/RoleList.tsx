@@ -2,16 +2,19 @@ import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import MemberRole from "../artifacts/contracts/MemberRole.sol/MemberRole.json";
 import { CONTRACT_ADDRESS } from "../config";
-import { Button, Card } from "antd";
+import { Button, Card, Form, Input } from "antd";
 
 function RoleList() {
-	const [roleTypes, setRoleTypes] = useState(0);
+	const [roleTypes, setRoleTypes] = useState<any>(0);
 	const [roleNames, setRoleNames] = useState<any>([]);
+	const [form] = Form.useForm();
+
 	useEffect(() => {
 		fetchRoleTypes();
-	}, []);
+	}, [roleNames]);
 	const fetchRoleTypes = async () => {
 		if (typeof window.ethereum !== undefined) {
+			let arr: any[] = [];
 			const provider = new ethers.providers.Web3Provider(window.ethereum);
 			await provider.send("eth_requestAccounts", []);
 			const signer = provider.getSigner();
@@ -25,8 +28,29 @@ function RoleList() {
 				setRoleTypes(roles.toNumber());
 				for (let i = 0; i < roles.toNumber(); i++) {
 					let role = await contract.roleTypes(i);
-					setRoleNames([...roleNames, role]);
+					arr.push(role);
 				}
+			} catch (error) {
+				console.log("Error", error);
+			}
+			setRoleNames(arr);
+		}
+	};
+	const handleCreateNewRole = async (values: any) => {
+		if (typeof window.ethereum !== undefined) {
+			const provider = new ethers.providers.Web3Provider(window.ethereum);
+			await provider.send("eth_requestAccounts", []);
+			const signer = provider.getSigner();
+			const contract = new ethers.Contract(
+				CONTRACT_ADDRESS,
+				MemberRole.abi,
+				signer
+			);
+			try {
+				const role = await contract.addRoleType(values.new_role_name);
+				role.wait();
+				fetchRoleTypes();
+				form.setFieldsValue({ new_role_name: "" });
 			} catch (error) {
 				console.log("Error", error);
 			}
@@ -35,7 +59,6 @@ function RoleList() {
 	return (
 		<span
 			style={{
-				height: "100vh",
 				width: "100vw",
 				display: "flex",
 				flexDirection: "column",
@@ -43,6 +66,21 @@ function RoleList() {
 				alignItems: "center",
 			}}
 		>
+			<Form onFinish={handleCreateNewRole} form={form}>
+				<Form.Item name="new_role_name">
+					<Input
+						style={{
+							width: 200,
+						}}
+					/>
+				</Form.Item>
+				<Form.Item>
+					<Button type="primary" htmlType="submit">
+						Create Role
+					</Button>
+				</Form.Item>
+			</Form>
+
 			{roleTypes !== 0 ? (
 				roleNames.map((val: any, i: any) => (
 					<Card key={i} style={{ width: 300, margin: "10px" }}>

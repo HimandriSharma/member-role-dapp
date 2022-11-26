@@ -32,9 +32,7 @@ function RoleList() {
 					arr.push(role);
 				}
 			} catch (error) {
-				notification.error({
-					message: "Error occured while role type creation.",
-				});
+				// console.log(error)
 			}
 			setRoleNames(arr);
 		}

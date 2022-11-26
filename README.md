@@ -1,13 +1,27 @@
-# Sample Hardhat Project
+# Member Role DAPP
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+This project uses hardhat and ReactJS along with TypeScript. 
 
-Try running some of the following tasks:
+To set up the project locally:
+(make sure you have node installed on your system)
+
+In one terminal instance : 
 
 ```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
+npm install
 npx hardhat node
-npx hardhat run scripts/deploy.ts
+```
+Run following command in another terminal instance:
+
+```shell
+npx hardhat run scripts/deploy.ts --network localhost
+```
+
+You will receive contract address. Replace the CONTRACT_ADDRESS in /src/config.ts .
+
+Import first address of hardhat addresses in your metamask to be authenticated as owner of contract.
+
+Run following command to start-up the react add.
+```shell
+npm start
 ```

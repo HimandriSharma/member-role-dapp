@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import MemberRole from "../artifacts/contracts/MemberRole.sol/MemberRole.json";
 import { CONTRACT_ADDRESS } from "../config";
-import { Button, Card, Form, Input } from "antd";
+import { Button, Card, Form, Input, notification } from "antd";
+import "../App.css";
 
 function RoleList() {
 	const [roleTypes, setRoleTypes] = useState(0);
@@ -31,7 +32,9 @@ function RoleList() {
 					arr.push(role);
 				}
 			} catch (error) {
-				console.log("Error", error);
+				notification.error({
+					message: "Error occured while role type creation.",
+				});
 			}
 			setRoleNames(arr);
 		}
@@ -50,22 +53,17 @@ function RoleList() {
 				const role = await contract.addRoleType(values.new_role_name);
 				role.wait();
 				fetchRoleTypes();
+				notification.success({message:"Role Type created successfully."})
 				form.setFieldsValue({ new_role_name: "" });
 			} catch (error) {
-				console.log("Error", error);
+				notification.error({
+					message: "Error occured while role type creation.",
+				});
 			}
 		}
 	};
 	return (
-		<span
-			style={{
-				width: "100vw",
-				display: "flex",
-				flexDirection: "column",
-				justifyContent: "center",
-				alignItems: "center",
-			}}
-		>
+		<span className="center-width">
 			<Form onFinish={handleCreateNewRole} form={form}>
 				<Form.Item name="new_role_name">
 					<Input
@@ -84,7 +82,7 @@ function RoleList() {
 			{roleTypes !== 0 ? (
 				roleNames.map((val, i) => (
 					<Card key={i} style={{ width: 300, margin: "10px" }}>
-						{val}
+						index = {i} : {val}
 					</Card>
 				))
 			) : (

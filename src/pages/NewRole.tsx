@@ -1,10 +1,15 @@
-import { Button, Card, Form, Input } from "antd";
+import { Button, Card, Form, Input, notification } from "antd";
 import { ethers } from "ethers";
 import { CONTRACT_ADDRESS } from "../config";
 import MemberRole from "../artifacts/contracts/MemberRole.sol/MemberRole.json";
+import "../App.css";
 
 function NewRole() {
-	const handleCreateRole = async (values: { address: String; index: String; }) => {
+	const [form] = Form.useForm();
+	const handleCreateRole = async (values: {
+		address: String;
+		index: String;
+	}) => {
 		if (typeof window.ethereum !== "undefined") {
 			const provider = new ethers.providers.Web3Provider(window.ethereum);
 			await provider.send("eth_requestAccounts", []);
@@ -15,34 +20,43 @@ function NewRole() {
 				signer
 			);
 			try {
-				const roles = await contract.addRole(values.address,values.index);
+				const roles = await contract.addRole(values.address, values.index);
 				roles.wait();
-        console.log(roles)
+				notification.success({
+					message: "Congratulations! Transaction Successfully.",
+				});
 			} catch (error) {
-				console.log("Error", error);
+				notification.error({ message: `There was an error : ${error}` });
 			}
+			form.setFieldsValue({ address: "", index: "" });
 		}
 	};
 	return (
-		<Card style={{ width: 500 }}>
-			<Form onFinish={handleCreateRole}>
-				<Form.Item label="Member address" name="address" style={{ width: 300 }}>
-					<Input />
-				</Form.Item>
-				<Form.Item
-					label="Role Type Index"
-					name="index"
-					style={{ width: 300 }}
-				>
-					<Input />
-				</Form.Item>
-				<Form.Item>
-					<Button type="primary" htmlType="submit">
-						Create Role
-					</Button>
-				</Form.Item>
-			</Form>
-		</Card>
+		<span className="center-page">
+			<Card style={{ width: 500 }} title="Create/Update member details">
+				<Form form={form} onFinish={handleCreateRole}>
+					<Form.Item
+						label="Member address"
+						name="address"
+						style={{ width: 300 }}
+					>
+						<Input />
+					</Form.Item>
+					<Form.Item
+						label="Role Type Index"
+						name="index"
+						style={{ width: 300 }}
+					>
+						<Input />
+					</Form.Item>
+					<Form.Item>
+						<Button type="primary" htmlType="submit">
+							Create Role
+						</Button>
+					</Form.Item>
+				</Form>
+			</Card>
+		</span>
 	);
 }
 

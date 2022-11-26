@@ -65,7 +65,7 @@ function RoleList() {
 	return (
 		<span className="center-width">
 			<Form onFinish={handleCreateNewRole} form={form}>
-				<Form.Item name="new_role_name">
+				<Form.Item name="new_role_name" rules={[{ required: true, message: 'Please input role type' }]}>
 					<Input
 						style={{
 							width: 200,

@@ -39,6 +39,7 @@ function NewRole() {
 						label="Member address"
 						name="address"
 						style={{ width: 300 }}
+						rules={[{ required: true, message: 'Please input member address' }]}
 					>
 						<Input />
 					</Form.Item>
@@ -46,6 +47,7 @@ function NewRole() {
 						label="Role Type Index"
 						name="index"
 						style={{ width: 300 }}
+						rules={[{ required: true, message: 'Please input role type index' }]}
 					>
 						<Input />
 					</Form.Item>

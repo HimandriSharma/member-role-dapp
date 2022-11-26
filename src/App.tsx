@@ -4,6 +4,7 @@ import MemberRole from "./artifacts/contracts/MemberRole.sol/MemberRole.json";
 import "./App.css";
 import RoleList from "./pages/RoleList";
 import { CONTRACT_ADDRESS } from "./config";
+import NewRole from "./pages/NewRole";
 
 function App() {
 	const [roleTypes, setRoleTypes] = useState(0);
@@ -36,7 +37,7 @@ function App() {
 		<div className="App">
 			hello dapp
 			{/* <button onClick={fetchRoleTypes}>here</button> */}
-			<RoleList />
+			<NewRole/>
 		</div>
 	);
 }

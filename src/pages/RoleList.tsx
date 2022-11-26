@@ -5,16 +5,16 @@ import { CONTRACT_ADDRESS } from "../config";
 import { Button, Card, Form, Input } from "antd";
 
 function RoleList() {
-	const [roleTypes, setRoleTypes] = useState<any>(0);
-	const [roleNames, setRoleNames] = useState<any>([]);
+	const [roleTypes, setRoleTypes] = useState(0);
+	const [roleNames, setRoleNames] = useState<String[]>([]);
 	const [form] = Form.useForm();
 
 	useEffect(() => {
 		fetchRoleTypes();
 	}, [roleNames]);
 	const fetchRoleTypes = async () => {
-		if (typeof window.ethereum !== undefined) {
-			let arr: any[] = [];
+		if (typeof window.ethereum !== "undefined") {
+			let arr: String[] = [];
 			const provider = new ethers.providers.Web3Provider(window.ethereum);
 			await provider.send("eth_requestAccounts", []);
 			const signer = provider.getSigner();
@@ -36,8 +36,8 @@ function RoleList() {
 			setRoleNames(arr);
 		}
 	};
-	const handleCreateNewRole = async (values: any) => {
-		if (typeof window.ethereum !== undefined) {
+	const handleCreateNewRole = async (values: { new_role_name: String }) => {
+		if (typeof window.ethereum !== "undefined") {
 			const provider = new ethers.providers.Web3Provider(window.ethereum);
 			await provider.send("eth_requestAccounts", []);
 			const signer = provider.getSigner();
@@ -76,13 +76,13 @@ function RoleList() {
 				</Form.Item>
 				<Form.Item>
 					<Button type="primary" htmlType="submit">
-						Create Role
+						Create Role Type
 					</Button>
 				</Form.Item>
 			</Form>
 
 			{roleTypes !== 0 ? (
-				roleNames.map((val: any, i: any) => (
+				roleNames.map((val, i) => (
 					<Card key={i} style={{ width: 300, margin: "10px" }}>
 						{val}
 					</Card>

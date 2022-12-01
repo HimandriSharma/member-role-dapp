@@ -21,7 +21,7 @@ You will receive contract address. Replace the CONTRACT_ADDRESS in /src/config.t
 
 Import first address of hardhat addresses in your metamask to be authenticated as owner of contract.
 
-Run following command to start-up the react add.
+Run following command to start-up the react app.
 ```shell
 npm start
 ```
